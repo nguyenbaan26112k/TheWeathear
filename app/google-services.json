@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "316714439971",
+    "project_id": "the-weather-83f61",
+    "storage_bucket": "the-weather-83f61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316714439971:android:b6011bc7943f23b659a896",
+        "android_client_info": {
+          "package_name": "com.example.theweathear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316714439971-mr0dtjfj67et4h6lq7sbsq1q5e6i2hiq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6LrX9sQNtgEUifHp01ZvWIuhI0wsBQno"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316714439971-mr0dtjfj67et4h6lq7sbsq1q5e6i2hiq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

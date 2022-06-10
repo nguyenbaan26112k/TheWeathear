@@ -1,0 +1,52 @@
+package com.example.theweathear.support;
+
+public interface KeyName {
+    String PREF_FIRST_INSTALL = "PREF_FIRST_INSTALL";
+    String currentLocation = "Vị trí hiện tại";
+    String position = "position";
+    String checkdelete = "checkdelete";
+    String apiKey = "&appid=2b3b281579d0f20196defe7e8bbb0c78";
+    String metric = "&units=metric";
+    String lang = "&lang=vi";
+    String doc = "°C";
+    String coord = "coord";
+    String lat = "lat";
+    String lon = "lon";
+    String speedunit = "m/s";
+    String weather = "weather";
+    String description = "description";
+    String main = "main";
+    String icon = "icon";
+    String temp = "temp";
+    String temphigh = "temp_max";
+    String templow = "temp_min";
+    String humidity = "humidity";
+    String feelslike = "feels_like";
+    String wind = "wind";
+    String speed = "speed";
+    String sys = "sys";
+    String sunrise = "sunrise";
+    String sunset = "sunset";
+    String hourly = "hourly";
+    String dt = "dt";
+    String list = "list";
+    String d01 = "01d";
+    String d02 = "02d";
+    String d03 = "03d";
+    String d04 = "04d";
+    String d09 = "09d";
+    String d10 = "10d";
+    String d11 = "11d";
+    String d13 = "13d";
+    String d50 = "50d";
+    String n01 = "01n";
+    String n02 = "02n";
+    String n03 = "03n";
+    String n04 = "04n";
+    String n09 = "09n";
+    String n10 = "10n";
+    String n11 = "11n";
+    String n13 = "13n";
+    String n50 = "50n";
+
+}
