@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,6 +24,7 @@ import com.example.theweathear.model.City;
 import com.example.theweathear.support.DataLocalManager;
 import com.example.theweathear.support.ItemViewAdapter;
 import com.example.theweathear.support.KeyName;
+import com.example.theweathear.support.MyHelperSQLite;
 import com.example.theweathear.support.NetworkChangeListenner;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public Toast makeText;
     public FusedLocationProviderClient fusedLocationProviderClient;
     public NetworkChangeListenner listenner = new NetworkChangeListenner();
+    private MyHelperSQLite myDB;
 
 
     @Override
@@ -48,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         cities = new ArrayList<>();
-        cities = DataLocalManager.getListData();
+        myDB = new MyHelperSQLite(this);
+        getListData();
+        checkLocation();
         binding.menu.setOnClickListener(view -> {
             for (int i = 0; i < cities.size(); i++) {
                 if (cities.get(i).getName().equalsIgnoreCase(KeyName.currentLocation)) {
@@ -57,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        checkLocation();
-
         itemViewAdapter = new ItemViewAdapter(cities, MainActivity.this);
         binding.viewPager.setAdapter(itemViewAdapter);
         binding.circleIncicator.setViewPager(binding.viewPager);
@@ -90,9 +93,20 @@ public class MainActivity extends AppCompatActivity {
             makeText.show();
         }
         backPressedTime = System.currentTimeMillis();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRF = database.getReference(KeyName.position);
-        myRF.setValue(0);
+    }
+    private void getListData(){
+        Cursor cursor = myDB.getAllCity();
+        if (cursor.getCount()==0){
+            Log.e("Load Data From SQLite","No Data");
+        }else {
+            while (cursor.moveToNext()){
+                // 1 vi tri cot thu nhat
+                // 2 vi tri cot thu hai
+                // 3 vi tri cot thu ba
+                City city = new City(cursor.getString(1),cursor.getString(2),cursor.getString(3) );
+                cities.add(city);
+            }
+        }
     }
 
     private void checkLocation() {

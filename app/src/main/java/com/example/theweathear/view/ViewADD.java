@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import com.example.theweathear.support.DataLocalManager;
 import com.example.theweathear.support.IsetOnClickListener;
 import com.example.theweathear.support.ItemCityAdapter;
 import com.example.theweathear.support.KeyName;
+import com.example.theweathear.support.MyHelperSQLite;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -54,7 +56,8 @@ public class ViewADD extends AppCompatActivity {
     private List<City> cities;
     private ItemCityAdapter itemCityAdapter;
     private boolean clicked = false;
-    public static boolean clickedDelete = false;
+    private MyHelperSQLite myDB;
+
     private Animation fabopen, fabclose, rotateForward, rotateBackward;
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
             , new ActivityResultCallback<ActivityResult>() {
@@ -64,6 +67,7 @@ public class ViewADD extends AppCompatActivity {
                         Place place = Autocomplete.getPlaceFromIntent(result.getData());
                         City citySearch = new City(place.getName(), String.valueOf(place.getLatLng().latitude), String.valueOf(place.getLatLng().longitude));
                         cities.add(citySearch);
+                        myDB.addCity(citySearch);
                         itemCityAdapter.setData(cities);
                     } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR) {
                         Status status = Autocomplete.getStatusFromIntent(result.getData());
@@ -80,7 +84,8 @@ public class ViewADD extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_view_add);
         cities = new ArrayList<>();
-        cities = DataLocalManager.getListData();
+        myDB = new MyHelperSQLite(this);
+        getListData();
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             return;
@@ -96,7 +101,7 @@ public class ViewADD extends AppCompatActivity {
         itemCityAdapter = new ItemCityAdapter(this, new IsetOnClickListener() {
             @Override
             public void onClickItemListener(int position) {
-                sendData(position, cities);
+                sendData(position);
             }
         });
         itemCityAdapter.setData(cities);
@@ -111,7 +116,7 @@ public class ViewADD extends AppCompatActivity {
         binding.exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendData(0, cities);
+                sendData(0);
             }
         });
         binding.addButton.setOnClickListener(view -> onAddButtonClicked());
@@ -163,6 +168,7 @@ public class ViewADD extends AppCompatActivity {
                     for (int i = 0;i<cities.size();i++){
                         if (editText.getText().toString().equalsIgnoreCase(cities.get(i).getName())){
                             cities.remove(i);
+                            myDB.deleteCity(editText.getText().toString());
                             itemCityAdapter.setData(cities);
                             editText.setText("");
                             textView.setVisibility(View.VISIBLE);
@@ -183,6 +189,20 @@ public class ViewADD extends AppCompatActivity {
         cancel.setOnClickListener(view -> dialog.dismiss());
         dialog.show();
 
+    }
+    private void getListData(){
+        Cursor cursor = myDB.getAllCity();
+        if (cursor.getCount()==0){
+            Log.e("Load Data From SQLite","No Data");
+        }else {
+            while (cursor.moveToNext()){
+                // 1 vi tri cot thu nhat
+                // 2 vi tri cot thu hai
+                // 3 vi tri cot thu ba
+                City city = new City(cursor.getString(1),cursor.getString(2),cursor.getString(3) );
+                cities.add(city);
+            }
+        }
     }
 
     private void onAddButtonClicked() {
@@ -217,16 +237,15 @@ public class ViewADD extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        sendData(0, cities);
+        sendData(0);
     }
 
-    private void sendData(int position, List<City> mlist) {
+    private void sendData(int position) {
         Intent intent = new Intent(ViewADD.this, MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(KeyName.position,position);
         intent.putExtras(bundle);
         startActivity(intent);
-        DataLocalManager.setStringJsonArray(mlist);
         finish();
     }
 

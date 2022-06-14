@@ -2,8 +2,10 @@ package com.example.theweathear.support;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -51,7 +53,26 @@ public class MyHelperSQLite extends SQLiteOpenHelper {
             Toast.makeText(context, "Ok", Toast.LENGTH_SHORT).show();
         }
     }
+    public void deleteCity(String nameCity){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_NAME+" WHERE " + NAME_CITY + " = " +nameCity;
+        long result = db.delete(TABLE_NAME,NAME_CITY+"=?",new String[]{nameCity});
+        if (result == -1 ){
+            Log.e("SQLite Delete","Faild");
+        }else {
+            Log.e("SQLite Delete","Successfully");
+        }
+    }
+    public Cursor getAllCity(){
+        String query = "SELECT * FROM " + TABLE_NAME ;
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         String query = "DROP TABLE IF EXISTS " + TABLE_NAME;
