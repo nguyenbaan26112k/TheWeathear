@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">The Weathear</string>
+    <string name="app_name">The Weather</string>
     <string name="center">|</string>
     <string name="open">The Weathear</string>
     <string name="Sunrise">Sunrise</string>
@@ -9,7 +9,7 @@
     <string name="feelslike">Feels like</string>
     <string name="airquality">Air quality</string>
     <string name="detail">Detail</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="disconnected">Không có kết nối Internet</string>
     <string name="city">Thành phố</string>
     <string name="delete">Xóa</string>

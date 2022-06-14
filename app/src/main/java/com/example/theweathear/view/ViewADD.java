@@ -35,7 +35,6 @@ import com.example.theweathear.R;
 import com.example.theweathear.databinding.ActivityViewAddBinding;
 import com.example.theweathear.model.City;
 
-import com.example.theweathear.support.DataLocalManager;
 import com.example.theweathear.support.IsetOnClickListener;
 import com.example.theweathear.support.ItemCityAdapter;
 import com.example.theweathear.support.KeyName;
@@ -52,14 +51,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ViewADD extends AppCompatActivity {
-    public static ActivityViewAddBinding binding;
+    private ActivityViewAddBinding binding;
     private List<City> cities;
     private ItemCityAdapter itemCityAdapter;
     private boolean clicked = false;
     private MyHelperSQLite myDB;
 
     private Animation fabopen, fabclose, rotateForward, rotateBackward;
-    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+    private final ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
             , new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
@@ -172,7 +171,7 @@ public class ViewADD extends AppCompatActivity {
                             itemCityAdapter.setData(cities);
                             editText.setText("");
                             textView.setVisibility(View.VISIBLE);
-                            textView.setText("xóa thành công");
+                            textView.setText("Xóa thành công");
                             textView.setTextColor(R.color.green);
                             break;
                         }else {
